@@ -1,0 +1,14 @@
+version: "2"
+
+services:
+  nginx:
+    image: ckulka/infcloud
+    restart: always
+    ports:
+      - "80:80"
+
+  php:
+    image: php:7.3-fpm-alpine
+    restart: always
+    volumes_from:
+      - nginx:ro
