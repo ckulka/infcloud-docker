@@ -1,0 +1,50 @@
+# Docker Compose file for InfCloud and a Baikal server
+# Based on issue https://github.com/ckulka/baikal-docker/issues/13
+
+# The changes to the config-baikal.js file are
+#
+# - Adjustments in globalNetworkCheckSettings.href (line 335)
+# - Set globalUseJqueryAuth = true (line 391) to use Digest Auth
+#
+# This setup currently doesn't work for me because of authentication issues
+# and I'm not sure if due to the browser or settings in the config.js.
+
+version: "2"
+
+services:
+  infcloud:
+    image: ckulka/infcloud
+    restart: always
+    labels:
+      traefik.enable: true
+      traefik.frontend.rule: "Host: infcloud.localhost"
+      traefik.port: 80
+    volumes:
+      - ./config-baikal.js:/usr/share/nginx/html/config.js:ro
+
+  php:
+    image: php:7.3-fpm-alpine
+    restart: always
+    volumes_from:
+      - infcloud:ro
+
+  baikal:
+    image: ckulka/baikal:experimental-nginx
+    restart: always
+    labels:
+      traefik.enable: true
+      traefik.frontend.rule: "Host: baikal.localhost"
+      traefik.port: 80
+
+  # See https://docs.traefik.io/
+  traefik:
+    image: traefik:1.7-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --accesslog
+      - --docker
+      - --docker.exposedByDefault=false
