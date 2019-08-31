@@ -1,16 +1,22 @@
-version: "2"
+version: "3"
 
 services:
   infcloud:
     image: ckulka/infcloud
     restart: always
+    depends_on:
+      - php
     ports:
       - "80:80"
     volumes:
+      - infcloud:/usr/share/nginx/infcloud
       - ./config.js:/usr/share/nginx/html/config.js:ro
 
   php:
     image: php:7.3-fpm-alpine
     restart: always
-    volumes_from:
-      - infcloud:ro
+    volumes:
+      - infcloud:/usr/share/nginx/infcloud:ro
+
+volumes:
+  infcloud:

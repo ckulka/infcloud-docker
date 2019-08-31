@@ -15,5 +15,5 @@ LABEL repository="https://github.com/ckulka/infcloud-docker"
 LABEL website="https://www.inf-it.com/open-source/clients/infcloud/"
 
 VOLUME /usr/share/nginx/html
-COPY --from=builder infcloud /usr/share/nginx/html
+COPY --from=builder infcloud /usr/share/nginx/infcloud
 COPY files/nginx.conf /etc/nginx/conf.d/default.conf

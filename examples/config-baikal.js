@@ -388,7 +388,6 @@ var globalNetworkCheckSettings = {
 // If undefined (or empty), custom header for HTTP basic auth is used.
 // Example:
 //var globalUseJqueryAuth=false;
-var globalUseJqueryAuth = true;
 
 
 // globalBackgroundSync

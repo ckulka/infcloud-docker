@@ -1,13 +1,12 @@
 # Docker Compose file for InfCloud and a Baikal server
 # Based on issue https://github.com/ckulka/baikal-docker/issues/13
 
-# The changes to the config-baikal.js file are
+# The changes to the config-baikal.js file are adjustments in globalNetworkCheckSettings.href (line 335)
 #
-# - Adjustments in globalNetworkCheckSettings.href (line 335)
-# - Set globalUseJqueryAuth = true (line 391) to use Digest Auth
+# For this setup to work, you also have to change WebDAV authentication type to Basic:
 #
-# This setup currently doesn't work for me because of authentication issues
-# and I'm not sure if due to the browser or settings in the config.js.
+# 1. Go to Baikal Settings (http://baikal.localhost/admin/?/settings/standard/)
+# 2. Change "WebDAV authentication type" to "Basic"
 
 version: "2"
 
@@ -15,18 +14,21 @@ services:
   infcloud:
     image: ckulka/infcloud
     restart: always
+    depends_on:
+      - php
     labels:
       traefik.enable: true
       traefik.frontend.rule: "Host: infcloud.localhost"
       traefik.port: 80
     volumes:
-      - ./config-baikal.js:/usr/share/nginx/html/config.js:ro
+      - infcloud:/usr/share/nginx/infcloud
+      - ./config-baikal.js:/usr/share/nginx/infcloud/config.js:ro
 
   php:
     image: php:7.3-fpm-alpine
     restart: always
-    volumes_from:
-      - infcloud:ro
+    volumes:
+      - infcloud:/usr/share/nginx/infcloud:ro
 
   baikal:
     image: ckulka/baikal:experimental-nginx
@@ -48,3 +50,6 @@ services:
       - --accesslog
       - --docker
       - --docker.exposedByDefault=false
+
+volumes:
+  infcloud:
