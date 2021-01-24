@@ -17,7 +17,7 @@ services:
     depends_on:
       - php
     labels:
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.frontend.rule: "Host: infcloud.localhost"
       traefik.port: 80
     volumes:
@@ -34,9 +34,11 @@ services:
     image: ckulka/baikal:experimental-nginx
     restart: always
     labels:
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.frontend.rule: "Host: baikal.localhost"
       traefik.port: 80
+    volumes:
+      - ./baikal-nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
   # See https://docs.traefik.io/
   traefik:
