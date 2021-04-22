@@ -10,7 +10,7 @@ services:
       - "80:80"
     volumes:
       - infcloud:/usr/share/nginx/infcloud
-      - ./config.js:/usr/share/nginx/html/config.js:ro
+      - ./config.js:/usr/share/nginx/infcloud/config.js:ro
 
   php:
     image: php:7.3-fpm-alpine
