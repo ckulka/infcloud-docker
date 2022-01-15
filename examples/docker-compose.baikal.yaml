@@ -30,8 +30,14 @@ services:
     volumes:
       - infcloud:/usr/share/nginx/infcloud:ro
 
+  # IMPORTANT: For current configuration examples, see
+  #   - Simple Baikal example: https://github.com/ckulka/baikal-docker/blob/master/examples/docker-compose.yaml
+  #   - Traefik/SSL example: https://github.com/ckulka/baikal-docker/blob/master/examples/docker-compose.ssl.yaml
+  #
+  # Especially make sure that the "fastcgi_pass" path matches the nginx
+  # configuration from here: https://github.com/ckulka/baikal-docker/blob/master/files/nginx.conf
   baikal:
-    image: ckulka/baikal:experimental-nginx
+    image: ckulka/baikal:nginx
     restart: always
     labels:
       traefik.enable: "true"
