@@ -12,6 +12,9 @@ on:
       - .github/workflows/docker-build.yml
       - Dockerfile
       - files/*
+  release:
+    types:
+      - published
 
 jobs:
   build:
@@ -35,10 +38,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push latest
+      - name: Build and push experimental image
         if: github.event_name == 'push'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           push: true
-          tags: ckulka/infcloud:latest
+          tags: ckulka/infcloud:experimental
+
+      - name: Build and push release image
+        if: github.event_name == 'release'
+        uses: docker/build-push-action@v2
+        with:
+          file: apache.dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/386
+          push: true
+          tags: |
+            ckulka/infcloud:${{ github.ref_name }}
+            ckulka/infcloud:latest
