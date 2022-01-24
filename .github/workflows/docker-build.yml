@@ -35,7 +35,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # Build Apache httpd images
       - name: Build and push latest
         if: github.event_name == 'push'
         uses: docker/build-push-action@v2
