@@ -1,9 +1,9 @@
 # Updates the Docker Hub description with the contents of the README.md file
 name: Docker Hub Description
 on:
-  push:
-    branches:
-      - master
+  release:
+    types:
+      - published
     paths:
       - README.md
       - .github/workflows/dockerhub-description.yml
